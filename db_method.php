@@ -87,5 +87,41 @@ if(isset($_POST['voter']))
     header('Location: index.php');
 
 }
+
+// Requete pour vérifier si l'utilisateur est dans la bdd et vérifier son rôle (admin ou pas)
+if(isset($_POST['userVerif']))
+{
+    // Connexion :
+    require_once("param.inc.php");
+    $mysqli = new mysqli($host, $login, $passwd, $dbname);
+    if ($mysqli->connect_error) {
+        die('Erreur de connexion (' . $mysqli->connect_errno . ') '
+                . $mysqli->connect_error);
+    }
+
+    $numCarte = htmlentities($_POST['numCarte']);
+
+
+    if ($stmt = $mysqli->prepare("SELECT numCarte FROM votant WHERE numCarte = '$numCarte'")){
+        if ($stmt -> execute()){
+          $result = $stmt->get_result();
+          $user_exist = $result->fetch_assoc();
+          if ($user_exist) {
+            $_SESSION['message'] = "Connecté !";
+            header ('Location: index.php');
+            exit();
+        
+        }else{
+            $_SESSION['message'] = "Aucun utilisateur trouvé ...";
+        }
+    } 
+    }
+
+    
+    
+    header('Location: index.php');
+
+}
+
 ?>
 
