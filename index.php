@@ -11,7 +11,9 @@
     <header class="bg-success text-white text-center py-5">
         <div class="container">
             <h1><?php echo $title; ?></h1>
+            <a href = "login.php">
             <button>Se connecter</button>
+            </a>
         </div>
     </header>
 
