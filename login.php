@@ -2,7 +2,8 @@
     session_start();
     $numCarteTest = "29c6323be6";
     $numCarteAdmin = "c489d0de43";
-    $_SESSION['numCarte'] = $numCarteTest;
+    $numCarte = shell_exec('/home/pi/script/tag_detect.sh');
+    $_SESSION['numCarte'] = $numCarte;
 
     // Connexion :
     require_once("param.inc.php");
@@ -13,7 +14,7 @@
     }
 
     $stmt = $mysqli->prepare("SELECT * FROM votant WHERE numCarte = ? ");
-    $stmt->bind_param("s", $numCarteTest);
+    $stmt->bind_param("s", $numCarte);
 
     if ($stmt->execute()){
 
