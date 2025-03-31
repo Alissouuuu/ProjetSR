@@ -84,7 +84,6 @@ if(isset($_POST['voter']))
         $stmt->bind_param("i", $user_id);
         if ($stmt -> execute()){
             $_SESSION['votant']['avote'] = 1;
-            $stmt->close();
             //c'est bien
             header('Location: vote.php');
         }

@@ -20,7 +20,11 @@
 
         $result = $stmt->get_result()->fetch_assoc();
         $_SESSION['votant'] = $result;
-        // header('Location: vote.php');
+        // echo "Nom du votant : " . $_SESSION['votant']['nom'];
+        // echo "Nom du votant : " . $_SESSION['votant']['IdVotant'];
+        // echo "Nom du votant : " . $_SESSION['votant']['avote'];
+        // echo "Nom du votant : " . $_SESSION['votant']['numCarte'];
+        header('Location: vote.php');
         exit();
     }
 ?>
