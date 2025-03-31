@@ -69,6 +69,7 @@ if(isset($_POST['voter']))
         $nb_vote = (int) $user_exist['nombreVote'];
         $nv_nb = $nb_vote + 1;
         }
+        $stmt->close();
     } 
 
     if ($stmt = $mysqli->prepare("UPDATE projet SET nombreVote=? WHERE IdProjet ='$project_id'")){
@@ -76,12 +77,14 @@ if(isset($_POST['voter']))
         if ($stmt -> execute()){
             //c'est bien
         }
+        $stmt->close();
     }
     
     if ($stmt = $mysqli->prepare("UPDATE votant SET avote=1 WHERE IdVotant = ?")){
         $stmt->bind_param("i", $user_id);
         if ($stmt -> execute()){
             $_SESSION['votant']['avote'] = 1;
+            $stmt->close();
             //c'est bien
             header('Location: vote.php');
         }
