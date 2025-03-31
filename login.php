@@ -1,6 +1,9 @@
 <?php
-    $numCarte = "29c6323be6";
-    echo "<h1>$numCarte</h1>";
+    session_start();
+    $numCarteTest = "29c6323be6";
+    $numCarteAdmin = "c489d0de43";
+    $_SESSION['numCarte'] = $numCarteTest;
+
     // Connexion :
     require_once("param.inc.php");
     $mysqli = new mysqli($host, $login, $passwd, $dbname);
@@ -9,21 +12,14 @@
                 . $mysqli->connect_error);
     }
 
-    $stmt = $mysqli->prepare("SELECT numCarte FROM votant WHERE numCarte = ? ")
-    $stmt->bind_param("s", $numCarte);
+    $stmt = $mysqli->prepare("SELECT * FROM votant WHERE numCarte = ? ");
+    $stmt->bind_param("s", $numCarteTest);
 
-        if ($stmt -> execute()){
-          $result = $stmt->get_result();
-          $user_exist = $result->fetch_assoc();
-          if ($user_exist) {
-            $_SESSION['role'] = $result['numCarte']
-            $_SESSION['message'] = "Connecté !";
-            exit();
-        }else{
-            $_SESSION['message'] = "Aucun utilisateur trouvé ...";
-        }
-    } 
+    if ($stmt->execute()){
 
-
-    header('vote.php');
+        $result = $stmt->get_result()->fetch_assoc();
+        $_SESSION['votant'] = $result;
+        header('Location: vote.php');
+        exit();
+    }
 ?>

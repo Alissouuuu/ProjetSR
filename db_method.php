@@ -1,5 +1,5 @@
 <?php
-//session_start(); // Démarre la session
+session_start(); // Démarre la session
 
 
 // Ajouter un projet dans la BDD
@@ -59,7 +59,7 @@ if(isset($_POST['voter']))
     }
 
     $project_id = htmlentities($_POST['voter']);
-    $user_id = htmlentities($_POST['us_id']);
+    $user_id = $_SESSION['votant']['IdVotant'];
 
 
     if ($stmt = $mysqli->prepare("SELECT * FROM projet WHERE IdProjet ='$project_id'")){
@@ -78,48 +78,15 @@ if(isset($_POST['voter']))
         }
     }
     
-    if ($stmt = $mysqli->prepare("UPDATE votant SET avote=1 WHERE IdVotant ='$user_id'")){
+    if ($stmt = $mysqli->prepare("UPDATE votant SET avote=1 WHERE IdVotant = ?")){
+        $stmt->bind_param("i", $user_id);
         if ($stmt -> execute()){
+            $_SESSION['votant']['avote'] = 1;
             //c'est bien
+            header('Location: vote.php');
         }
     }
-    
-    header('Location: index.php');
 
-}
-
-// Requete pour vérifier si l'utilisateur est dans la bdd et vérifier son rôle (admin ou pas)
-if(isset($_POST['userVerif']))
-{
-    // Connexion :
-    require_once("param.inc.php");
-    $mysqli = new mysqli($host, $login, $passwd, $dbname);
-    if ($mysqli->connect_error) {
-        die('Erreur de connexion (' . $mysqli->connect_errno . ') '
-                . $mysqli->connect_error);
-    }
-
-    $numCarte = htmlentities($_POST['numCarte']);
-
-
-    if ($stmt = $mysqli->prepare("SELECT numCarte FROM votant WHERE numCarte = '$numCarte'")){
-        if ($stmt -> execute()){
-          $result = $stmt->get_result();
-          $user_exist = $result->fetch_assoc();
-          if ($user_exist) {
-            $_SESSION['message'] = "Connecté !";
-            header ('Location: index.php');
-            exit();
-        
-        }else{
-            $_SESSION['message'] = "Aucun utilisateur trouvé ...";
-        }
-    } 
-    }
-
-    
-    
-    header('Location: index.php');
 
 }
 

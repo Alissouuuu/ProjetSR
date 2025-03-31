@@ -1,7 +1,7 @@
 <?php
+session_start();
     include('header.php');
     $title = "Choisissez votre projet PING !";
-    $user_id = 1;
 ?>
 <body>
     <?php
@@ -31,11 +31,9 @@
             <tr>
                 <?php
                 $query = "SELECT * FROM projet";
-                $query2 = "SELECT * FROM Votant WHERE IdVotant=$user_id";
                 require_once("param.inc.php");
                 $mysqli = new mysqli($host, $login, $passwd, $dbname);
                 $query_run = mysqli_query($mysqli, $query);
-                $query_run2 = mysqli_query($mysqli, $query2);
 
                 // On vérifie que la table n'est pas vide
                 if(mysqli_num_rows($query_run) > 0){
@@ -61,16 +59,7 @@
 
                             <?php
 
-                                if(mysqli_num_rows($query_run2) > 0){
-
-                                    $stmt = $mysqli->prepare("SELECT * FROM votant WHERE IdVotant=$user_id");
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
-
-                                    //Pour chaque ligne du résultat
-                                    foreach($query_run2 as $votant){
-
-                                        if($votant['avote']==0){
+                                if($_SESSION['votant']['avote']==0){
 
                             ?>
 
@@ -80,9 +69,9 @@
                             </form>
 
                             <?php
-                                        }
-                                    }
                                 }
+                                    
+                                
                             ?>
 
                             <button class="btn btn-success" data-bs-toggle="collapse" data-bs-target="#<?= $projet['IdProjet'];?>">

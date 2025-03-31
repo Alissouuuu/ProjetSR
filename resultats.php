@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include('header.php');
     $title = "Voici les résultats !";
 ?>
@@ -17,7 +18,7 @@
 
         <?php
 
-            if ($_ROLE == 1){
+            if ($_SESSION['votant']['nom'] == "admin"){
 
         ?>
 
